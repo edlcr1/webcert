@@ -90,6 +90,8 @@ public class ValidateCertificateFacadeServiceImpl implements ValidateCertificate
     }
 
     // TODO: We need a way to give correct message to the user. Or should frontend adjust based on component?
+    // We will translate any dynamic keys to the correct message -> codeToMessage.
+    // We will translate any TYPE (missing dynamic key) and COMPONENT_TYPE to the correct message -> typeToMessage
     private String getValidationText(String field) {
         if (field.contains("har")) {
             return "Välj ett alternativ.";
