@@ -238,8 +238,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         try {
             return subscriptionRestService.getMissingSubscriptions(careProviderOrgNumbers, authMethod);
         } catch (Exception e) {
-            LOG.error("Kundportalen subscription service call failure for org numbers {}.", careProviderOrgNumbers.values(), e);
-            monitorLogIfServiceCallFailure(flatMapCollection(careProviderOrgNumbers.values()), e);
+            final var careProviders = flatMapCollection(careProviderOrgNumbers.values());
+            LOG.error("Kundportalen subscription service call failure for org numbers {}.", careProviders, e);
+            monitorLogIfServiceCallFailure(careProviders, e);
             return Collections.emptyList();
         }
     }

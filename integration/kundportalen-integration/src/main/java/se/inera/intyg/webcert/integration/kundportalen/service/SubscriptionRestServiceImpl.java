@@ -19,11 +19,15 @@
 
 package se.inera.intyg.webcert.integration.kundportalen.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -40,6 +44,8 @@ import se.inera.intyg.webcert.integration.kundportalen.enumerations.Authenticati
 
 @Service
 public class SubscriptionRestServiceImpl implements SubscriptionRestService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SubscriptionRestServiceImpl.class);
 
     @Value("${kundportalen.access.token}")
     private String kundportalenAccessToken;
@@ -60,9 +66,11 @@ public class SubscriptionRestServiceImpl implements SubscriptionRestService {
         = new ParameterizedTypeReference<>() { };
 
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-    public SubscriptionRestServiceImpl(@Qualifier("subscriptionServiceRestTemplate") RestTemplate restTemplate) {
+    public SubscriptionRestServiceImpl(@Qualifier("subscriptionServiceRestTemplate") RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -85,12 +93,22 @@ public class SubscriptionRestServiceImpl implements SubscriptionRestService {
         return restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity, LIST_ORGANIZATION_RESPONSE);
     }
 
-    private HttpEntity<Set<String>> getRequestEntity(Set<String> organizationNumbers) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", kundportalenAccessToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return new HttpEntity<>(organizationNumbers, headers);
+    private HttpEntity<String> getRequestEntity(Set<String> organizationNumbers) {
+        final var organizationNumbersJson = getOrganizationNumbersJson(organizationNumbers);
+        final var httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", kundportalenAccessToken);
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+        return new HttpEntity<>(Objects.requireNonNull(organizationNumbersJson), httpHeaders);
+    }
+
+    private String getOrganizationNumbersJson(Set<String> organizationNumbers) {
+        try {
+            return objectMapper.writeValueAsString(organizationNumbers);
+        } catch (JsonProcessingException e) {
+            LOG.error("Failure parsing organization numbers as json for kunpdportalen subscription service request.", e);
+            return null;
+        }
     }
 
     private String getRequestUrlWithParams() {
