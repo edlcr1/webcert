@@ -30,15 +30,17 @@ public class CertificateType {
     private List<String> versions;
     private List<CertificateStatus> statuses;
     private List<CreateCertificateFillType> fillType;
+    private boolean sendElectronically;
 
     public CertificateType(String type, String internalType, String name, List<String> versions, List<CertificateStatus> statuses,
-        List<CreateCertificateFillType> fillType) {
+        List<CreateCertificateFillType> fillType, boolean sendElectronically) {
         this.type = type;
         this.internalType = internalType;
         this.name = name;
         this.versions = versions;
         this.statuses = statuses;
         this.fillType = fillType;
+        this.sendElectronically = sendElectronically;
     }
 
     public String getType() {
@@ -87,5 +89,13 @@ public class CertificateType {
 
     public void setFillType(List<CreateCertificateFillType> fillType) {
         this.fillType = fillType;
+    }
+
+    public boolean isSendElectronically() {
+        return sendElectronically;
+    }
+
+    public void setSendElectronically(boolean sendElectronically) {
+        this.sendElectronically = sendElectronically;
     }
 }

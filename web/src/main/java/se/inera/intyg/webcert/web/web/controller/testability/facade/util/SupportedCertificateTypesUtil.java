@@ -42,7 +42,8 @@ public class SupportedCertificateTypesUtil {
                 Af00213EntryPoint.MODULE_NAME,
                 Collections.singletonList("1.0"),
                 Arrays.asList(CertificateStatus.UNSIGNED, CertificateStatus.SIGNED, CertificateStatus.LOCKED),
-                Arrays.asList(CreateCertificateFillType.EMPTY, CreateCertificateFillType.MINIMAL)
+                Arrays.asList(CreateCertificateFillType.EMPTY, CreateCertificateFillType.MINIMAL),
+                true
             )
         );
         certificateTypes.add(
@@ -52,7 +53,8 @@ public class SupportedCertificateTypesUtil {
                 LisjpEntryPoint.MODULE_NAME,
                 Arrays.asList("1.0", "1.1", "1.2"),
                 Arrays.asList(CertificateStatus.UNSIGNED, CertificateStatus.SIGNED, CertificateStatus.LOCKED),
-                Arrays.asList(CreateCertificateFillType.EMPTY, CreateCertificateFillType.MINIMAL)
+                Arrays.asList(CreateCertificateFillType.EMPTY, CreateCertificateFillType.MINIMAL),
+                true
             )
         );
         return certificateTypes;
