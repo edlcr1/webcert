@@ -69,7 +69,7 @@ public class GetPatientFacadeServiceImpl implements GetPatientFacadeService {
         return Patient.builder()
                 .personId(
                         PersonId.builder()
-                                .id(patientId)
+                                .id(addDashToPatientId(patientId))
                                 .type("")
                                 .build()
                 )
@@ -81,6 +81,10 @@ public class GetPatientFacadeServiceImpl implements GetPatientFacadeService {
                 .protectedPerson(personSvar.getPerson().isSekretessmarkering())
                 .testIndicated(personSvar.getPerson().isTestIndicator())
                 .build();
+    }
+
+    private String addDashToPatientId(String patientId) {
+        return patientId.substring(0, 8) + '-' + patientId.substring(8);
     }
 
     private String getFullName(PersonSvar personSvar) {

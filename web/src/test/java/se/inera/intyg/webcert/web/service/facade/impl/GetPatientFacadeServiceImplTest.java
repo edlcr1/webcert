@@ -46,6 +46,7 @@ public class GetPatientFacadeServiceImplTest {
     private GetPatientFacadeServiceImpl getPatientFacadeService;
 
     private final static String PATIENT_ID = "191212121212";
+    private final static String PATIENT_ID_WITH_DASH = "19121212-1212";
     private final static String FIRSTNAME = "firstname";
     private final static String LASTNAME = "lastname";
     private final static String MIDDLENAME = "middlename";
@@ -75,7 +76,7 @@ public class GetPatientFacadeServiceImplTest {
 
         final var patient = getPatientFacadeService.getPatient(PATIENT_ID);
 
-        assertEquals(PATIENT_ID, patient.getPersonId().getId());
+        assertEquals(PATIENT_ID_WITH_DASH, patient.getPersonId().getId());
     }
 
     @Test
