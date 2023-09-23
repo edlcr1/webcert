@@ -18,7 +18,7 @@
  */
 
 /* global console */
-
+TEST
 (function() {
   'use strict';
 
